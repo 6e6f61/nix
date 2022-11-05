@@ -24,6 +24,12 @@
         specialArgs = { inherit inputs; };
         modules = [ ./hosts/officewerks/configuration.nix ];
       };
+
+      doom = nixpkgs.lib.nixosSystem {
+        pkgs = legacyPackages.x86_64-linux;
+        specialArgs = { inherit inputs; };
+        modules = [ ./hosts/doom/configuration.nix ];
+      };
     };
 
     homeConfigurations = {
