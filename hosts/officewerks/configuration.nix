@@ -80,14 +80,18 @@
     isNormalUser = true;
     packages = with pkgs; [
       # Web
-      firefox tdesktop cinny-desktop fluffychat kmail
+      firefox tdesktop cinny-desktop kmail
+      tor-browser-bundle-bin
 
       # Development
-      vscodium python311 git xorriso qemu tmux kdevelop
+      vscodium python311 git xorriso qemu tmux
+      zig go lua texlive.combined.scheme-full rustup
+      clang
 
       # Accessories
       keepassxc pfetch veracrypt krdc calligra
-      ktorrent kate mullvad-vpn
+      ktorrent kate mullvad-vpn kile
+      noto-fonts-cjk-sans
 
       # Multimedia
       ffmpeg mpv obs-studio
@@ -96,7 +100,7 @@
       unzip unrar ark
 
       # Games
-      prismlauncher
+      prismlauncher libsForQt5.kpat
 
       # Unfree
       spotify discord obsidian
