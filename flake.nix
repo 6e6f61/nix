@@ -15,6 +15,11 @@
         inherit system;
 
         config.allowUnfree = true;
+        config.permittedInsecurePackages = [
+            # What's using this?
+            "qtwebkit-5.212.0-alpha4"
+        ];
+        
       }
     );
 
@@ -37,6 +42,12 @@
         pkgs = legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs; };
         modules = [ ./hosts/officewerks/home.nix ];
+      };
+
+      "i@doom" = home-manager.lib.homeManagerConfiguration {
+        pkgs = legacyPackages.x86_64-linux;
+        extraSpecialArgs = { inherit inputs; };
+        modules = [ ./home/doom/home.nix ];
       };
     };
   };

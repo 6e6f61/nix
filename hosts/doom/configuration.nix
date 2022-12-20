@@ -1,9 +1,10 @@
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   imports =
     [
       ./hardware-configuration.nix
+      inputs.home-manager.nixosModules.home-manager
     ];
 
   boot = {
@@ -22,11 +23,15 @@
   
   time.timeZone = "Australia/Adelaide";
 
+  hardware.opengl.enable = true;
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+
   services = {
     xserver = {
       enable = true;
-      desktopManager.plasma5.enable = true;
+      windowManager.herbstluftwm.enable = true;
       displayManager.sddm.enable = true;
+      videoDrivers = [ "nvidia" ];
     };
 
     syncthing = {
@@ -63,7 +68,7 @@
       vscodium python311 git xorriso qemu tmux
 
       keepassxc pfetch veracrypt krdc calligra
-      ktorrent kate mullvad-vpn
+      ktorrent kate mullvad-vpn cinny
 
       ffmpeg mpv obs-studio
 
