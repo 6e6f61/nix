@@ -32,12 +32,15 @@ in
       nrs = "doas nixos-rebuild switch --flake /home/${username}/Nix#doom";
       hms = "home-manager switch --flake /home/${username}/Nix#${username}@doom";
     };
-    bash.initExtra = "unset HISTFILE";
+    bash.initExtra = ''
+      unset HISTFILE
+      PS1="\[\e[34m\]\w\[\e[m\]\[\e[30m\]%\[\e[m\] "
+    '';
 
     urxvt.enable = true;
     urxvt = {
       scroll.bar.enable = false;
-      fonts = [ "xft:Monaco:size=10" ];
+      fonts = [ "xft:Monaco:size=8" ];
     };
   };
 

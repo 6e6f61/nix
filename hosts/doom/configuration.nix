@@ -70,7 +70,7 @@
 
       keepassxc pfetch veracrypt
       ktorrent mullvad-vpn cinny
-      feh
+      feh lemonbar-xft
 
       ffmpeg mpv obs-studio
 
@@ -80,7 +80,7 @@
 
       spotify discord obsidian
 
-      dmenu rxvt-unicode
+      dmenu rxvt-unicode flameshot
     ];
   };
   programs.kdeconnect.enable = true;
