@@ -4,50 +4,48 @@
   inputs = {
     nixpkgs.url  = "github:nixos/nixpkgs/nixos-unstable";
     hardware.url = "github:nixos/nixos-hardware";
-    home-manager.url = "github:nix-community/home-manager";
 
+    zig.url = "github:mitchellh/zig-overlay";
+    
+    home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, home-manager, ... }@inputs: rec {
-    legacyPackages = nixpkgs.lib.genAttrs [ "x86_64-linux" "x86_64-darwin" ] (system:
-      import inputs.nixpkgs {
-        inherit system;
-
-        config.allowUnfree = true;
-        config.permittedInsecurePackages = [
-            # What's using this?
-            "qtwebkit-5.212.0-alpha4"
-        ];
-        
-      }
-    );
+  outputs = { self, nixpkgs, zig, home-manager, ... }@inputs:
+    let
+      inherit (self) outputs;
+      forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" ];
+    in
+    rec {
+     packages = forAllSystems (system:
+       let pkgs = nixpkgs.legacyPackages.${system};
+       in import ./pkgs { inherit pkgs; }
+     );
 
     nixosConfigurations = {
       officewerks = nixpkgs.lib.nixosSystem {
-        pkgs = legacyPackages.x86_64-linux;
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs outputs; };
         modules = [ ./hosts/officewerks/configuration.nix ];
       };
 
       doom = nixpkgs.lib.nixosSystem {
-        pkgs = legacyPackages.x86_64-linux;
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs outputs; };
         modules = [ ./hosts/doom/configuration.nix ];
       };
     };
 
+    homeManagerModules = import ./modules/home-manager;
     homeConfigurations = {
       "i@officewerks" = home-manager.lib.homeManagerConfiguration {
-        pkgs = legacyPackages.x86_64-linux;
-        extraSpecialArgs = { inherit inputs; };
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        extraSpecialArgs = { inherit inputs outputs; };
         modules = [ ./hosts/officewerks/home.nix ];
       };
 
       "i@doom" = home-manager.lib.homeManagerConfiguration {
-        pkgs = legacyPackages.x86_64-linux;
-        extraSpecialArgs = { inherit inputs; };
-        modules = [ ./home/doom/home.nix ];
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        extraSpecialArgs = { inherit inputs outputs; };
+        modules = [ ./hosts/doom/home.nix ];
       };
     };
   };

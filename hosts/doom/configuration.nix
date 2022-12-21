@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, outputs, config, pkgs, ... }:
 
 {
   imports =
@@ -63,12 +63,14 @@
   users.users.i = {
     isNormalUser = true;
     packages = with pkgs; [
-      firefox tdesktop kmail
+      firefox tdesktop
 
-      vscodium python311 git xorriso qemu tmux
+      python311 git xorriso qemu tmux
+      inputs.zig.packages.x86_64-linux.master
 
-      keepassxc pfetch veracrypt krdc calligra
-      ktorrent kate mullvad-vpn cinny
+      keepassxc pfetch veracrypt
+      ktorrent mullvad-vpn cinny
+      feh
 
       ffmpeg mpv obs-studio
 
@@ -77,6 +79,8 @@
       prismlauncher
 
       spotify discord obsidian
+
+      dmenu rxvt-unicode
     ];
   };
   programs.kdeconnect.enable = true;
@@ -87,8 +91,11 @@
   };
 
   environment.systemPackages = with pkgs; [
-    kakoune git
+    helix git
   ];
+
+  fonts.fontDir.enable = true;
+  fonts.fonts = [ outputs.packages.x86_64-linux.monaco-font ];
 
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = "nix-command flakes";
