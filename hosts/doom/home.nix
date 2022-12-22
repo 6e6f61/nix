@@ -10,7 +10,7 @@ let
 in
 {
   imports = with outputs.homeManagerModules; [
-    herbstluftwm tmux
+    herbstluftwm tmux helix
    ];
 
   home = {
@@ -20,22 +20,30 @@ in
 
   programs = {
     home-manager.enable = true;
+
+    git.enable = true;
     git = {
-      enable = true;
       userName = "6e6f61";
       userEmail = "";
+      extraConfig = {
+        init = {
+          defaultBranch = "master";
+        };
+      };
     };
 
     bash.enable = true;
-    bash.historyControl = [ "ignorespace" ];
-    bash.shellAliases = {
-      nrs = "doas nixos-rebuild switch --flake /home/${username}/Nix#doom";
-      hms = "home-manager switch --flake /home/${username}/Nix#${username}@doom";
+    bash = {
+      historyControl = [ "ignorespace" ];
+      shellAliases = {
+        nrs = "doas nixos-rebuild switch --flake /home/${username}/Nix#doom";
+        hms = "home-manager switch --flake /home/${username}/Nix#${username}@doom";
+      };
+      initExtra = ''
+        unset HISTFILE
+        PS1="\[\e[34m\]\w\[\e[m\]\[\e[30m\]%\[\e[m\] "
+      '';
     };
-    bash.initExtra = ''
-      unset HISTFILE
-      PS1="\[\e[34m\]\w\[\e[m\]\[\e[30m\]%\[\e[m\] "
-    '';
 
     urxvt.enable = true;
     urxvt = {
@@ -47,6 +55,5 @@ in
   xresources.extraConfig = Xresources.dark + Xresources.urxvt;
 
   systemd.user.startServices = "sd-switch";
-
   home.stateVersion = "22.05";
 }
