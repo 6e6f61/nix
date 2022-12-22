@@ -42,6 +42,7 @@ in
       initExtra = ''
         unset HISTFILE
         PS1="\[\e[34m\]\w\[\e[m\]\[\e[30m\]%\[\e[m\] "
+        GIT_ASKPASS=""
       '';
     };
 
