@@ -8,6 +8,12 @@ in
     extraConfig = ''
       herbstclient detect_monitors
 
+      for i in {1..10}
+      do
+        herbstclient keybind Mod4-''${i} use ''${i}
+        herbstclient keybind Mod4-Shift-''${i} move ''${i}
+      done
+
       ${bar_script} | lemonbar &
     '';
     tags = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" ];
@@ -39,6 +45,7 @@ in
       Mod4-r = "remove";
       Mod4-s = "floating toggle";
       Mod4-f = "fullscreen toggle";
+
 
       # Splitting
       Mod4-b = "split bottom 0.5";
