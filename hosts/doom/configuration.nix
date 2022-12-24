@@ -60,6 +60,14 @@
     persist = true;
   }];
 
+  fonts.fontDir.enable = true;
+  fonts = {
+    fonts = [ outputs.packages.x86_64-linux.monaco-font ];
+    fontconfig.defaultFonts = {
+      monospace = [ "Monaco" ];
+    };
+  };
+
   users.users.i = {
     isNormalUser = true;
     packages = with pkgs; [
@@ -94,8 +102,8 @@
     helix git
   ];
 
-  fonts.fontDir.enable = true;
-  fonts.fonts = [ outputs.packages.x86_64-linux.monaco-font ];
+#  fonts.fontDir.enable = true;
+#  fonts.fonts = [ outputs.packages.x86_64-linux.monaco-font ];
 
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = "nix-command flakes";

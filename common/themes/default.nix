@@ -1,0 +1,3 @@
+{
+  bluey = import ./bluey.nix;
+}

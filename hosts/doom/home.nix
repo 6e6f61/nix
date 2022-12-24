@@ -2,16 +2,8 @@
 
 let
   username = "i";
-  Xresources = {
-    read = file: (builtins.readFile (./. + "../../../common" + ("/" + file)));
-    dark = (Xresources.read "Xresources.dark");
-    urxvt = (Xresources.read "Xresources.urxvt");
-  };
 in
 {
-  imports = with outputs.homeManagerModules; [
-    herbstluftwm tmux helix
-   ];
 
   home = {
     username = username;
@@ -41,19 +33,11 @@ in
       };
       initExtra = ''
         unset HISTFILE
-        PS1="\[\e[34m\]\w\[\e[m\]\[\e[30m\]%\[\e[m\] "
-        GIT_ASKPASS=""
+        SSH_ASKPASS=""
       '';
-    };
-
-    urxvt.enable = true;
-    urxvt = {
-      scroll.bar.enable = false;
-      fonts = [ "xft:Monaco:size=8" ];
+#        PS1="\[\e[34m\]\w\[\e[m\]\[\e[30m\]%\[\e[m\] "
     };
   };
-
-  xresources.extraConfig = Xresources.dark + Xresources.urxvt;
 
   systemd.user.startServices = "sd-switch";
   home.stateVersion = "22.05";

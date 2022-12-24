@@ -1,10 +1,5 @@
-let
-  bar_script = ./. + "../../../common/bar";
-in
 {
   xsession.windowManager.herbstluftwm = {
-    enable = true;
-
     extraConfig = ''
       herbstclient detect_monitors
 
@@ -13,8 +8,6 @@ in
         herbstclient keybind Mod4-''${i} use ''${i}
         herbstclient keybind Mod4-Shift-''${i} move ''${i}
       done
-
-      ${bar_script} | lemonbar &
     '';
     tags = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" ];
     keybinds = {
@@ -22,10 +15,10 @@ in
       Mod4-Shift-q = "close";
       Mod4-Shift-r = "reload";
 
-      Mod4-h = "focus left";
-      Mod4-j = "focus down";
-      Mod4-k = "focus up";
-      Mod4-l = "focus right";
+      Mod4-h = "focus left --level=tabs";
+      Mod4-j = "focus down --level=tabs";
+      Mod4-k = "focus up --level=tabs";
+      Mod4-l = "focus right --level=tabs";
 
       # Focus
       Mod4-BackSpace = "cycle_monitor";
@@ -45,14 +38,14 @@ in
       Mod4-r = "remove";
       Mod4-s = "floating toggle";
       Mod4-f = "fullscreen toggle";
-
+      Mod4-t = "cycle_layout 1 max grid";
 
       # Splitting
       Mod4-b = "split bottom 0.5";
       Mod4-v = "split right 0.5";
     };
 
-    rules = [
+    rules = [ 
       "focus=on"
     ];
 

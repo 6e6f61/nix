@@ -15,13 +15,13 @@ fi
 # Print the title of the active window of the specified tag
 function active_window() {
   active_window_id=$(herbstclient layout "$1" --title | cut -d' ' -f3)
-	active_window_raw=$(herbstclient list_clients --tag="$1" --title | awk -v awi="$active_window_id" '$1 == awi {for (i=2; i<NF; i++) printf $i " "; print $NF}')
-	if [ ${#active_window_raw} -ge $2 ]
-	then
-	  # This is not pretty
-		echo -n "[$(echo ${active_window_raw} | head -c $2)...] "
-	else
-	  echo -n "[${active_window_raw}] "
+  active_window_raw=$(herbstclient list_clients --tag="$1" --title | awk -v awi="$active_window_id" '$1 == awi {for (i=2; i<NF; i++) printf $i " "; print $NF}')
+  if [ ${#active_window_raw} -ge $2 ]
+  then
+    # This is not pretty
+    echo -n "[$(echo ${active_window_raw} | head -c $2)...] "
+  else
+    echo -n "[${active_window_raw}] "
   fi
 }
 
@@ -30,26 +30,26 @@ function print_tags() {
   for tag in $(herbstclient tag_status)
   do
     tag_name="${tag:1}"
-	  case $tag in
-	    # Non-empty, visible on a different monitor
-	    -*)
-  			echo -ne "${INACTIVE_VISIBLE}${tag_name}"
-				active_window $tag_name $1
-	  	  ;;
-  		# Active
-  		\#*)
-  		  echo -ne "${ACTIVE}${tag_name}"
-				active_window $tag_name $1
-  			;;
-  		# Inactive, open windows
-  		:*) 
-  		  echo -ne "${INACTIVE}${tag_name}"
-				active_window $tag_name $1
-  			;;
-  	  # Inactive, no windows and urgent window respectively
-  		.* | !*)
-				;;
-  	esac
+    case $tag in
+      # Non-empty, visible on a different monitor
+      -*)
+        echo -ne "${INACTIVE_VISIBLE}${tag_name}"
+        active_window $tag_name $1
+        ;;
+      # Active
+      \#*)
+        echo -ne "${ACTIVE}${tag_name}"
+        active_window $tag_name $1
+        ;;
+      # Inactive, open windows
+      :*) 
+        echo -ne "${INACTIVE}${tag_name}"
+        active_window $tag_name $1
+        ;;
+      # Inactive, no windows and urgent window respectively
+      .* | !*)
+        ;;
+    esac
   done
 }
 
