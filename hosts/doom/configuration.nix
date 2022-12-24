@@ -45,8 +45,8 @@
 
     pipewire = {
       enable = true;
+      # Alsa, Pulseaudio, and Jack emulation/support within Pipewire.
       alsa.enable = true;
-      #alsa.support32Bit = true;
       pulse.enable = true;
       jack.enable = true;
     };
@@ -71,40 +71,41 @@
   users.users.i = {
     isNormalUser = true;
     packages = with pkgs; [
+      # Web
       firefox tdesktop
 
-      python311 git xorriso qemu tmux
+      # Programming
+      python311 git tmux
       inputs.zig.packages.x86_64-linux.master
 
-      keepassxc pfetch veracrypt
-      ktorrent mullvad-vpn cinny
-      feh lemonbar-xft
+      # Terminal
+      tmux rxvt-unicode pfetch
+      unrar unzip ark ffmpeg
 
-      ffmpeg mpv obs-studio
+      # Window management
+      dmenu lemonbar-xft
 
-      unzip unrar ark
+      # Media
+      flameshot mpv obs-studio feh
 
+      # Assorted
+      keepassxc mullvad-vpn
+
+      # Games
       prismlauncher
 
+      # Proprietary software containment
       spotify discord obsidian
-
-      dmenu rxvt-unicode flameshot
     ];
   };
-  programs.kdeconnect.enable = true;
+
   programs.steam.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    pinentryFlavor = "qt";
-  };
 
   environment.systemPackages = with pkgs; [
     helix git
   ];
 
-#  fonts.fontDir.enable = true;
-#  fonts.fonts = [ outputs.packages.x86_64-linux.monaco-font ];
-
+  # Sadge
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = "nix-command flakes";
   nix.settings.auto-optimise-store = true;

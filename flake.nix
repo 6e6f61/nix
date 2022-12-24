@@ -52,6 +52,7 @@
               ./hosts/doom/home.nix
               themes.bluey
               configs.tmux configs.helix configs.herbstluftwm
+              configs.git
             ];
         };
       };

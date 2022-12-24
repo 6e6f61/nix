@@ -1,4 +1,5 @@
 {
+  xsession.windowManager.herbstluftwm.enable = true;
   xsession.windowManager.herbstluftwm = {
     extraConfig = ''
       herbstclient detect_monitors
@@ -34,7 +35,7 @@
       Mod4-d = "spawn dmenu_run";
       Print = "spawn flameshot gui";
 
-      # Managing Applications
+      # Window management
       Mod4-r = "remove";
       Mod4-s = "floating toggle";
       Mod4-f = "fullscreen toggle";
@@ -45,9 +46,7 @@
       Mod4-v = "split right 0.5";
     };
 
-    rules = [ 
-      "focus=on"
-    ];
+    rules = [ "focus=on" ];
 
     settings = {
       frame_border_active_color = "#8ABEB7";

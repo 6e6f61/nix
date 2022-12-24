@@ -13,17 +13,6 @@ in
   programs = {
     home-manager.enable = true;
 
-    git.enable = true;
-    git = {
-      userName = "6e6f61";
-      userEmail = "";
-      extraConfig = {
-        init = {
-          defaultBranch = "master";
-        };
-      };
-    };
-
     bash.enable = true;
     bash = {
       historyControl = [ "ignorespace" ];
@@ -35,7 +24,6 @@ in
         unset HISTFILE
         SSH_ASKPASS=""
       '';
-#        PS1="\[\e[34m\]\w\[\e[m\]\[\e[30m\]%\[\e[m\] "
     };
   };
 
