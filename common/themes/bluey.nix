@@ -25,6 +25,9 @@ in
       herbstclient attr theme.title_height 15
       herbstclient attr theme.title_color white
 
+      # Maybe there's a more pragmatic way to set the wallpaper, but this werks
+      ~/.fehbg
+
       ${bar_script} | lemonbar &
     '';
     settings = {
@@ -36,6 +39,7 @@ in
   programs = {
     urxvt.enable = true;
     urxvt.scroll.bar.enable = false;
+    urxvt.fonts = [ "xft:Monaco:size=10" ];
 
     bash.enable = true;
     bash.initExtra = ''

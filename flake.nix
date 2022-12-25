@@ -35,6 +35,11 @@
           specialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/doom/configuration.nix ];
         };
+
+        trellion = nixpkgs.lib.nixosSystem = {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/trellion/configuration.nix ];
+        };
       };
 
       homeConfigurations = {
