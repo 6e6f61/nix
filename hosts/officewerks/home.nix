@@ -1,36 +1,14 @@
-{ inputs, lib, config, pkgs, ... }:
+{ configs, hostConfig, ... }:
 
-let username = "i";
-in
 {
-  imports = [ ];
-
-  home = {
-    username = username;
-    homeDirectory = "/home/${username}";
-  };
+  #imports = [ configs.git configs.tmux configs.helix ];
 
   programs = {
-    home-manager.enable = true;
-    git = {
-      enable = true;
-      userName = "noatime";
-      userEmail = "";
-    };
-
     bash.enable = true;
-    bash.historyControl = [ "ignorespace" ];
-    bash.shellAliases = {
-      nrs = "doas nixos-rebuild switch --flake /home/${username}/Nix#officewerks";
-      hms = "home-manager switch --flake /home/${username}/Nix#${username}@officewerks";
+    bash = {
+      historyControl = [ "ignorespace" ];
+      shellAliases   = { nrs = "doas nixos-rebuild switch --flake ~/Nix#${hostConfig.hostname}"; };
+      initExtra = "unset HISTFILE";
     };
-    bash.sessionVariables = {
-      path = "$PATH:/home/${username}/.bin/zig/zig";
-    };
-    bash.shellInit = "unset HISTFILE";
   };
-
-  systemd.user.startServices = "sd-switch";
-
-  home.stateVersion = "22.05";
 }

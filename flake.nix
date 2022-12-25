@@ -38,8 +38,8 @@
       nixosConfigurations = mkSystems
         [
           { hostname = "trellion";    username = "brink"; }
-          { hostname = "officewerks"; username = "i"; }
-          { hostname = "doom";        username = "i"; }
+          { hostname = "officewerks"; username = "i";     }
+          { hostname = "doom";        username = "i";     }
         ];
     };
 }

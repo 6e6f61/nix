@@ -1,5 +1,9 @@
 { inputs, outputs, pkgs, hostConfig, ... }:
 
+let
+  username = hostConfig.username;
+  hostname = hostConfig.hostname;
+in
 {
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -10,7 +14,7 @@
     loader.efi.canTouchEfiVariables = true;
   };
 
-  networking.hostName = hostConfig.hostname;
+  networking.hostName = hostname;
   networking.networkmanager.enable = true;
   networking.firewall.allowedTCPPorts =
     [
@@ -22,12 +26,12 @@
   security.sudo.enable = false;
   security.doas.enable = true;  
   security.doas.extraRules = [{
-    users = [hostConfig.username];
+    users = [ username ];
     keepEnv = true;
     persist = true;
   }];
 
-  users.users."${hostConfig.username}".isNormalUser = true;
+  users.users."${username}".isNormalUser = true;
 
   services.openssh.enable = true;
 
