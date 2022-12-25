@@ -1,4 +1,4 @@
-{ inputs, hostConfig, ... }:
+{ inputs, configs, hostConfig, ... }:
 
 let
   username = hostConfig.username;
@@ -11,6 +11,7 @@ in
       inputs.home-manager.nixosModules.home-manager
     ];
 
+  home-manager.extraSpecialArgs = { inherit hostConfig configs; };
   home-manager.users."${username}" = {
     imports = [ ./home.nix ];
 

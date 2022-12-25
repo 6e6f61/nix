@@ -1,4 +1,5 @@
 {
+  programs.tmux.enable = true;
   programs.tmux = {
     prefix = "C-Space";
     terminal = "screen-256color";

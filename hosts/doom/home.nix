@@ -1,32 +1,20 @@
-{ inputs, outputs, lib, config, pkgs, ... }:
+{ inputs, outputs, configs, hostConfig, ... }:
 
-let
-  username = "i";
-in
 {
-
-  home = {
-    username = username;
-    homeDirectory = "/home/${username}";
-  };
-
+  imports = [ configs.git configs.tmux configs.helix ];
+    
   programs = {
-    home-manager.enable = true;
-
     bash.enable = true;
     bash = {
       historyControl = [ "ignorespace" ];
       shellAliases = {
-        nrs = "doas nixos-rebuild switch --flake /home/${username}/Nix#doom";
-        hms = "home-manager switch --flake /home/${username}/Nix#${username}@doom";
+        nrs = "doas nixos-rebuild switch --flake /home/${hostConfig.username}/Nix#${hostConfig.hostname}";
       };
+
       initExtra = ''
         unset HISTFILE
         SSH_ASKPASS=""
       '';
     };
   };
-
-  systemd.user.startServices = "sd-switch";
-  home.stateVersion = "22.05";
 }

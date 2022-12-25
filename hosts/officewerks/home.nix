@@ -1,7 +1,8 @@
-{ configs, hostConfig, ... }:
+{ configs, outputs, hostConfig, ... }:
 
 {
-  #imports = [ configs.git configs.tmux configs.helix ];
+  imports = [ configs.git configs.tmux configs.helix ];
+  #imports = with outputs; [ configs.git configs.tmux configs.helix ];
 
   programs = {
     bash.enable = true;
