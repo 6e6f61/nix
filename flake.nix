@@ -16,14 +16,15 @@
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" ];
 
-      themes = import ./common/themes;
-      configs = import ./common/configurations;
     in
     rec {  
       packages = forAllSystems (system:
          let pkgs = nixpkgs.legacyPackages.${system};
          in import ./pkgs { inherit pkgs; }
        );
+
+      themes = import ./common/themes;
+      configs = import ./common/configurations;
 
       nixosConfigurations = {
         officewerks = nixpkgs.lib.nixosSystem {
@@ -36,9 +37,9 @@
           modules = [ ./hosts/doom/configuration.nix ];
         };
 
-        trellion = nixpkgs.lib.nixosSystem = {
+        trellion = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/trellion/configuration.nix ];
+          modules = [ ./hosts/trellion/configuration.nix ./hosts/trellion/home.nix ];
         };
       };
 
@@ -60,6 +61,16 @@
               configs.git
             ];
         };
+
+        # "brink@trellion" = home-manager.lib.homeManagerConfiguration {
+        #   pkgs = nixpkgs.legacyPackages.x86_86-linux;
+        #   extraSpecialArgs = { inherit inputs outputs; };
+        #   modules =
+        #     [
+        #       ./hosts/trellion/home.nix
+        #       configs.tmux configs.helix configs.git
+        #     ];
+        # };
       };
     };
 }

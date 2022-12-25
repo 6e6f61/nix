@@ -1,7 +1,11 @@
 { inputs, outputs, config, pkgs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports =
+    [
+      ./hardware-configuration.nix
+      inputs.home-manager.nixosModules.home-manager
+    ];
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -14,6 +18,10 @@
 
   networking.hostName = "trellion";
   networking.networkmanager.enable = true;
+  networking.firewall.allowedTCPPorts =
+    [
+      22 # sshd
+    ];
   
   time.timeZone = "Australia/Adelaide";
 
@@ -27,8 +35,10 @@
 
   users.users.brink.isNormalUser = true;
 
+  services.openssh.enable = true;
+
   environment.systemPackages = with pkgs; [
-    helix git
+    helix git tmux
   ];
 
   nix.settings.experimental-features = "nix-command flakes";
