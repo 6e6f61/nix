@@ -1,16 +1,16 @@
-{ inputs, outputs, pkgs, username }:
+{ inputs, outputs, pkgs, hostConfig, ... }:
 
 {
   imports = [ inputs.home-manager.nixosModules.home-manager ];
 
-  home-manager.users."${username}" = with outputs; {
+  home-manager.users."${hostConfig.username}" = with outputs; {
     imports = [ configs.git configs.tmux configs.helix ];
     
     programs.home-manager.enable = true;
 
     home = {
-      username = username;
-      homeDirectory = "/home/${username}";
+      username = hostConfig.username;
+      homeDirectory = "/home/${hostConfig.username}";
     };
 
     programs = {
@@ -18,7 +18,7 @@
       bash = {
         historyControl = [ "ignorespace" ];
         shellAliases = {
-          nrs = "doas nixos-rebuild switch --flake /home/${username}/Nix#trellion";
+          nrs = "doas nixos-rebuild switch --flake /home/${hostConfig.username}/Nix#${hostConfig.hostname}";
         };
 
         initExtra = ''

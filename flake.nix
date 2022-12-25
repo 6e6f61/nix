@@ -18,59 +18,28 @@
 
       mkSystems = hostnames:
         builtins.listToAttrs
-          (map(x: {
-            name  = x;
+          (map(hostConfig@{ hostname, username, ... }: {
+            name  = hostname;
             value = nixpkgs.lib.nixosSystem {
-              specialArgs = { inherit inputs outputs; };
-              modules = [ (./. + "/hosts/${x}") ];
+              specialArgs = { inherit inputs outputs hostConfig; };
+              modules = [ (./. + "/hosts/${hostname}") ];
             };
           }) hostnames);
     in
-    rec {  
+    rec {
       packages = forAllSystems (system:
          let pkgs = nixpkgs.legacyPackages.${system};
          in import ./pkgs { inherit pkgs; }
        );
 
-      themes = import ./common/themes;
+      themes  = import ./common/themes;
       configs = import ./common/configurations;
 
-      nixosConfigurations = mkSystems [ "trellion" "officewerks" "doom" ];
-      # nixosConfigurations = {
-      #   officewerks = nixpkgs.lib.nixosSystem {
-      #     specialArgs = { inherit inputs outputs; };
-      #     modules = [ ./hosts/officewerks/configuration.nix ];
-      #   };
-
-      #   doom = nixpkgs.lib.nixosSystem {
-      #     specialArgs = { inherit inputs outputs; };
-      #     modules = [ ./hosts/doom/configuration.nix ];
-      #   };
-
-        #trellion = nixpkgs.lib.nixosSystem {
-        #  specialArgs = { inherit inputs outputs; };
-        #  modules = [ ./hosts/trellion ];
-        #};
-      #};
-
-      # homeConfigurations = {
-      #   "i@officewerks" = home-manager.lib.homeManagerConfiguration {
-      #     pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      #     extraSpecialArgs = { inherit inputs outputs; };
-      #     modules = [ ./hosts/officewerks/home.nix ];
-      #   };
-
-      #   "i@doom" = home-manager.lib.homeManagerConfiguration {
-      #     pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      #     extraSpecialArgs = { inherit inputs outputs; };
-      #     modules =
-      #       [
-      #         ./hosts/doom/home.nix
-      #         themes.bluey
-      #         configs.tmux configs.helix configs.herbstluftwm
-      #         configs.git
-      #       ];
-      #   };
-      #};
+      nixosConfigurations = mkSystems
+        [
+          { hostname = "trellion";    username = "brink"; }
+          { hostname = "officewerks"; username = "i"; }
+          { hostname = "doom";        username = "i"; }
+        ];
     };
 }
