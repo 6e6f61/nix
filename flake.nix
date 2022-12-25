@@ -16,6 +16,15 @@
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" ];
 
+      mkSystems = hostnames:
+        builtins.listToAttrs
+          (map(x: {
+            name  = x;
+            value = nixpkgs.lib.nixosSystem {
+              specialArgs = { inherit inputs outputs; };
+              modules = [ (./. + "/hosts/${x}") ];
+            };
+          }) hostnames);
     in
     rec {  
       packages = forAllSystems (system:
@@ -26,51 +35,42 @@
       themes = import ./common/themes;
       configs = import ./common/configurations;
 
-      nixosConfigurations = {
-        officewerks = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/officewerks/configuration.nix ];
-        };
+      nixosConfigurations = mkSystems [ "trellion" "officewerks" "doom" ];
+      # nixosConfigurations = {
+      #   officewerks = nixpkgs.lib.nixosSystem {
+      #     specialArgs = { inherit inputs outputs; };
+      #     modules = [ ./hosts/officewerks/configuration.nix ];
+      #   };
 
-        doom = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/doom/configuration.nix ];
-        };
+      #   doom = nixpkgs.lib.nixosSystem {
+      #     specialArgs = { inherit inputs outputs; };
+      #     modules = [ ./hosts/doom/configuration.nix ];
+      #   };
 
-        trellion = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/trellion/configuration.nix ./hosts/trellion/home.nix ];
-        };
-      };
+        #trellion = nixpkgs.lib.nixosSystem {
+        #  specialArgs = { inherit inputs outputs; };
+        #  modules = [ ./hosts/trellion ];
+        #};
+      #};
 
-      homeConfigurations = {
-        "i@officewerks" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/officewerks/home.nix ];
-        };
+      # homeConfigurations = {
+      #   "i@officewerks" = home-manager.lib.homeManagerConfiguration {
+      #     pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      #     extraSpecialArgs = { inherit inputs outputs; };
+      #     modules = [ ./hosts/officewerks/home.nix ];
+      #   };
 
-        "i@doom" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules =
-            [
-              ./hosts/doom/home.nix
-              themes.bluey
-              configs.tmux configs.helix configs.herbstluftwm
-              configs.git
-            ];
-        };
-
-        # "brink@trellion" = home-manager.lib.homeManagerConfiguration {
-        #   pkgs = nixpkgs.legacyPackages.x86_86-linux;
-        #   extraSpecialArgs = { inherit inputs outputs; };
-        #   modules =
-        #     [
-        #       ./hosts/trellion/home.nix
-        #       configs.tmux configs.helix configs.git
-        #     ];
-        # };
-      };
+      #   "i@doom" = home-manager.lib.homeManagerConfiguration {
+      #     pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      #     extraSpecialArgs = { inherit inputs outputs; };
+      #     modules =
+      #       [
+      #         ./hosts/doom/home.nix
+      #         themes.bluey
+      #         configs.tmux configs.helix configs.herbstluftwm
+      #         configs.git
+      #       ];
+      #   };
+      #};
     };
 }

@@ -1,12 +1,6 @@
-{ inputs, outputs, config, pkgs, ... }:
+{ inputs, outputs, pkgs, username }:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.home-manager
-    ];
-
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [ "quiet" ];
@@ -28,18 +22,16 @@
   security.sudo.enable = false;
   security.doas.enable = true;  
   security.doas.extraRules = [{
-    users = ["brink"];
+    users = [username];
     keepEnv = true;
     persist = true;
   }];
 
-  users.users.brink.isNormalUser = true;
+  users.users."${username}".isNormalUser = true;
 
   services.openssh.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    helix git tmux
-  ];
+  environment.systemPackages = with pkgs; [ helix git tmux ];
 
   nix.settings.experimental-features = "nix-command flakes";
   nix.settings.auto-optimise-store = true;

@@ -1,13 +1,10 @@
-{ inputs, outputs, lib, config, pkgs, ... }:
+{ inputs, outputs, pkgs, username }:
 
-let
-  username = "brink";
-in
 {
   imports = [ inputs.home-manager.nixosModules.home-manager ];
 
   home-manager.users."${username}" = with outputs; {
-    imports = [ outputs.configs.git ];
+    imports = [ configs.git configs.tmux configs.helix ];
     
     programs.home-manager.enable = true;
 
@@ -23,6 +20,7 @@ in
         shellAliases = {
           nrs = "doas nixos-rebuild switch --flake /home/${username}/Nix#trellion";
         };
+
         initExtra = ''
           unset HISTFILE
           SSH_ASKPASS=""
